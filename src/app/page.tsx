@@ -1,65 +1,90 @@
-import Image from "next/image";
+import { EtheralShadow } from "@/components/ui/etheral-shadow";
+import { AlgorithmicArt } from "@/components/ui/AlgorithmicArt";
+import { Sparkles, ShieldCheck, Clock } from "lucide-react";
+import { ServicesSection } from "@/components/home/ServicesSection";
+import { MastersSection } from "@/components/home/MastersSection";
+import { PortfolioSection } from "@/components/home/PortfolioSection";
+import { TestimonialsSection } from "@/components/home/TestimonialsSection";
+import { BlogSection } from "@/components/home/BlogSection";
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="flex flex-col min-h-screen">
+      {/* Hero Section */}
+      <section className="relative w-full h-[calc(100vh-80px)]">
+        <EtheralShadow
+          color="rgba(245, 211, 217, 1)"
+          animation={{ scale: 100, speed: 90 }}
+          noise={{ opacity: 0.1, scale: 1.2 }}
+          sizing="fill"
+          className="absolute inset-0"
+        >
+          {/* Inject Generative Art over the shadow mask, but behind text */}
+          <AlgorithmicArt />
+          
+          <div className="flex flex-col items-center justify-center h-full space-y-8">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-[#222222]/10 bg-white/50 backdrop-blur-sm z-20">
+              <Sparkles size={16} className="text-[#c7919d]" />
+              <span className="text-[10px] md:text-xs uppercase tracking-[0.2em] font-sans font-medium">Ваше бьюти-пространство</span>
+            </div>
+            <h1 className="md:text-[6rem] text-6xl font-serif font-light text-[#222222] text-center relative z-20 leading-none tracking-tight">
+              ЛАЙК НЭЙЛС
+            </h1>
+            <p className="text-[#222222]/70 font-sans mt-4 max-w-lg text-center text-sm md:text-base tracking-wide relative z-20">
+              Маникюр, педикюр, уход за волосами и косметология на Политехнической.
+            </p>
+            <button className="z-20 mt-8 px-8 py-4 bg-[#222222] text-white rounded-full uppercase text-xs tracking-[0.2em] hover:bg-[#F5D3D9] hover:text-[#222222] transition-colors duration-300">
+              Онлайн-Запись
+            </button>
+          </div>
+        </EtheralShadow>
+      </section>
+
+      {/* Trust Signals / Features */}
+      <section className="py-24 px-6 max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 border-b border-gray-100">
+        <div className="flex flex-col items-center text-center space-y-6 group">
+          <div className="w-20 h-20 rounded-full bg-[#F5D3D9]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#F5D3D9]/40 transition-all duration-500">
+            <Sparkles className="text-[#c7919d]" size={32} />
+          </div>
+          <h3 className="font-serif text-3xl">Опытные мастера</h3>
+          <p className="text-sm font-sans opacity-60 leading-relaxed max-w-xs">
+            Команда профессионалов своего дела с многолетним стажем и регулярными повышениями квалификации.
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div className="flex flex-col items-center text-center space-y-6 group">
+          <div className="w-20 h-20 rounded-full bg-[#F5D3D9]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#F5D3D9]/40 transition-all duration-500">
+            <ShieldCheck className="text-[#c7919d]" size={32} />
+          </div>
+          <h3 className="font-serif text-3xl">Стерильность</h3>
+          <p className="text-sm font-sans opacity-60 leading-relaxed max-w-xs">
+            100% безопасность, многоступенчатая стерилизация инструментов по нормам СанПиН.
+          </p>
         </div>
-      </main>
-    </div>
+        <div className="flex flex-col items-center text-center space-y-6 group">
+          <div className="w-20 h-20 rounded-full bg-[#F5D3D9]/20 flex items-center justify-center group-hover:scale-110 group-hover:bg-[#F5D3D9]/40 transition-all duration-500">
+            <Clock className="text-[#c7919d]" size={32} />
+          </div>
+          <h3 className="font-serif text-3xl">Экономия времени</h3>
+          <p className="text-sm font-sans opacity-60 leading-relaxed max-w-xs">
+            Быстрая онлайн-запись в пару кликов и популярные услуги "в 6 рук" для вашего удобства.
+          </p>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <ServicesSection />
+
+      {/* Masters (Team) Section */}
+      <MastersSection />
+
+      {/* Portfolio Section */}
+      <PortfolioSection />
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
+
+      {/* Blog Section */}
+      <BlogSection />
+    </main>
   );
 }
