@@ -129,3 +129,21 @@
     @apply font-sans;
   }
 }
+
+/* Custom Scrollbar for Mobile Indicators */
+.scrollbar-indicator {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(34, 34, 34, 0.15) rgba(0, 0, 0, 0.03);
+}
+.scrollbar-indicator::-webkit-scrollbar {
+  height: 4px;
+}
+.scrollbar-indicator::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 4px;
+  margin: 0 10px;
+}
+.scrollbar-indicator::-webkit-scrollbar-thumb {
+  background: rgba(34, 34, 34, 0.15);
+  border-radius: 4px;
+}

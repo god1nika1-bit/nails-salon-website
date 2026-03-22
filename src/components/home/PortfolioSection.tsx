@@ -24,7 +24,7 @@ export function PortfolioSection() {
         </div>
 
         {/* Categories Stub */}
-        <div className="flex gap-4 mb-10 overflow-x-auto pb-4 scrollbar-hide">
+        <div className="flex gap-4 mb-10 overflow-x-auto pb-6 scrollbar-indicator">
           {categories.map((cat, idx) => (
             <button 
               key={idx} 

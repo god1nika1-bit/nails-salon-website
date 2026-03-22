@@ -55,7 +55,7 @@ export function ServicesSection() {
 
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-20">
           {/* Левое меню (Сайдбар) */}
-          <div className="md:col-span-4 lg:col-span-3 flex overflow-x-auto md:flex-col space-x-4 md:space-x-0 md:space-y-2 md:border-l border-gray-100 md:pl-6 pb-4 md:pb-0 scrollbar-hide">
+          <div className="md:col-span-4 lg:col-span-3 flex overflow-x-auto md:flex-col space-x-4 md:space-x-0 md:space-y-2 md:border-l border-gray-100 md:pl-6 pb-6 md:pb-0 scrollbar-indicator">
             {CATEGORIES.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
