@@ -1,6 +1,6 @@
-:HL["/nails-salon-website/_next/static/chunks/11ryvbnbm3akf.css","style"]
+:HL["/nails-salon-website/_next/static/chunks/0t.c5a3p1mi8a.css","style"]
 :HL["/nails-salon-website/_next/static/media/01e4147cff8141ee-s.p.10ked.7w885.g.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/nails-salon-website/_next/static/media/44fac91e6f2d2b1b-s.p.0f~sf101j6mzi.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/nails-salon-website/_next/static/media/b0947914c9718a1e-s.p.0l.9lak812di~.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 :HL["/nails-salon-website/_next/static/media/e8f2fbee2754df70-s.p.0fzkl03jw-sdz.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"reviews","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"DyoYZGMindquBcHU8PuxM"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"reviews","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"37wA1ri_Mwa3NjJuFLoQ0"}
