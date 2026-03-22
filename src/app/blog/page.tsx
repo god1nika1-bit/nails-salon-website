@@ -1,5 +1,3 @@
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
 import { FileText, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
@@ -14,9 +12,7 @@ export default function BlogPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-zinc-50 flex flex-col pt-20">
-      <Header />
-      
+    <main className="min-h-screen bg-zinc-50 flex flex-col">
       {/* Blog Hero Container */}
       <section className="py-20 px-6 bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end gap-6 mb-8">
@@ -78,8 +74,6 @@ export default function BlogPage() {
            <button className="w-10 h-10 rounded-full hover:bg-white hover:shadow-sm flex items-center justify-center border border-gray-100 transition-all text-gray-500 hover:text-[#222222]">3</button>
         </div>
       </section>
-
-      <Footer />
     </main>
   );
 }
