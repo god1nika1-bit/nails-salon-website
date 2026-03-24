@@ -9,10 +9,10 @@
 // 4. Замени значения ниже на реальные
 // ============================================================
 
-const BOT_TOKEN = "YOUR_BOT_TOKEN_HERE";
-const CHAT_ID = "YOUR_CHAT_ID_HERE";
+const BOT_TOKEN = "8600635626:AAEz2pwd3dYpKLVfwl3jQvMIGkmnRlg9qUk";
+const CHAT_ID = "-1003817212452";
 
-const IS_CONFIGURED = !BOT_TOKEN.includes("YOUR_") && !CHAT_ID.includes("YOUR_");
+const IS_CONFIGURED = true;
 
 interface BookingData {
   service: string;
