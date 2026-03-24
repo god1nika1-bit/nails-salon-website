@@ -3,10 +3,9 @@
 import { useState } from "react";
 import { Calendar, Clock, User, Scissors, Send } from "lucide-react";
 import { getMasterById } from "@/data/masters";
-import type { CartService } from "@/hooks/useServiceCart";
 
 interface ConfirmationFormProps {
-  services: CartService[];
+  service: { categoryId: string; name: string; price: string } | null;
   masterId: string | null;
   date: string | null;
   time: string | null;
@@ -18,7 +17,7 @@ function formatDate(dateStr: string): string {
   return date.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
 }
 
-export function ConfirmationForm({ services, masterId, date, time, onSubmit }: ConfirmationFormProps) {
+export function ConfirmationForm({ service, masterId, date, time, onSubmit }: ConfirmationFormProps) {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("+7");
   const [comment, setComment] = useState("");
@@ -50,25 +49,15 @@ export function ConfirmationForm({ services, masterId, date, time, onSubmit }: C
 
       {/* Summary */}
       <div className="bg-[var(--brand-surface)] rounded-2xl p-6 mb-8 space-y-4">
-        {/* Services list */}
-        <div className="flex items-start gap-3">
-          <Scissors size={16} className="text-[var(--brand-pink-dark)] shrink-0 mt-0.5" />
-          <div className="flex-1">
-            <p className="font-sans text-xs text-[var(--brand-text)]/40 mb-2">
-              {services.length === 1 ? "Услуга" : `Услуги (${services.length})`}
-            </p>
-            <div className="space-y-2">
-              {services.map((s) => (
-                <div key={s.name} className="flex items-center justify-between">
-                  <p className="font-serif text-base">{s.name}</p>
-                  <p className="font-sans text-sm font-medium text-[var(--brand-pink-dark)] ml-4 shrink-0">{s.price}</p>
-                </div>
-              ))}
-            </div>
+        <div className="flex items-center gap-3">
+          <Scissors size={16} className="text-[var(--brand-pink-dark)] shrink-0" />
+          <div>
+            <p className="font-sans text-xs text-[var(--brand-text)]/40">Услуга</p>
+            <p className="font-serif text-base">{service?.name}</p>
+            <p className="font-sans text-sm font-medium text-[var(--brand-pink-dark)]">{service?.price}</p>
           </div>
         </div>
-
-        <div className="border-t border-gray-100 pt-4 flex items-center gap-3">
+        <div className="flex items-center gap-3">
           <User size={16} className="text-[var(--brand-pink-dark)] shrink-0" />
           <div>
             <p className="font-sans text-xs text-[var(--brand-text)]/40">Мастер</p>

@@ -5,11 +5,6 @@ import {
   Search,
   ChevronDown,
   Clock,
-  Plus,
-  Check,
-  ShoppingBag,
-  X,
-  ArrowRight,
   Sparkles,
   Scissors,
   Droplets,
@@ -25,21 +20,31 @@ import {
   Palette,
   Sun,
 } from "lucide-react";
-import Link from "next/link";
 import { SERVICES_DATA, getAllServices, getTotalServicesCount } from "@/data/services";
 import { FadeInWhenVisible, TabTransition } from "@/components/ui/motion";
 import { motion, AnimatePresence } from "framer-motion";
-import { useServiceCart } from "@/hooks/useServiceCart";
 
 const ICON_MAP: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
-  Sparkles, Scissors, Droplets, Ribbon, Wind, Hand, Footprints, Zap, Eye, Activity, HeartHandshake, Flower2, Palette, Sun,
+  Sparkles,
+  Scissors,
+  Droplets,
+  Ribbon,
+  Wind,
+  Hand,
+  Footprints,
+  Zap,
+  Eye,
+  Activity,
+  HeartHandshake,
+  Flower2,
+  Palette,
+  Sun,
 };
 
 export default function ServicesPage() {
   const [activeCategory, setActiveCategory] = useState<string>(SERVICES_DATA[0].id);
   const [searchQuery, setSearchQuery] = useState("");
   const [openSubs, setOpenSubs] = useState<Set<string>>(new Set());
-  const { services: cartServices, toggleService, isInCart } = useServiceCart();
 
   const totalCount = getTotalServicesCount();
 
@@ -62,16 +67,11 @@ export default function ServicesPage() {
     });
   };
 
+  // Open by default only if category has a single subcategory
   const isSubOpen = (title: string) => {
     if (openSubs.has(title)) return true;
     if (openSubs.size === 0 && currentCategory.subcategories.length === 1) return true;
     return false;
-  };
-
-  // Find categoryId for a service from search results
-  const findCategoryId = (categoryName: string): string => {
-    const cat = SERVICES_DATA.find((c) => c.name === categoryName);
-    return cat?.id || "";
   };
 
   return (
@@ -84,13 +84,16 @@ export default function ServicesPage() {
               Услуги и Прайс
             </h1>
             <p className="font-sans text-sm text-[var(--brand-text)]/60 leading-relaxed max-w-xl mb-8">
-              {totalCount} услуг в 14 категориях. Выберите нужные услуги и запишитесь онлайн.
+              {totalCount} услуг в 14 категориях. Премиальные материалы и современные техники.
             </p>
           </FadeInWhenVisible>
 
           {/* Search */}
           <div className="relative max-w-md">
-            <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--brand-text)]/30" />
+            <Search
+              size={18}
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--brand-text)]/30"
+            />
             <input
               type="text"
               placeholder="Найти услугу..."
@@ -117,50 +120,39 @@ export default function ServicesPage() {
         <section className="px-6 md:px-20 py-12">
           <div className="max-w-5xl mx-auto">
             <p className="font-sans text-xs uppercase tracking-widest text-[var(--brand-text)]/40 mb-6">
-              {searchResults.length > 0 ? `Найдено ${searchResults.length} услуг` : "Ничего не найдено"}
+              {searchResults.length > 0
+                ? `Найдено ${searchResults.length} услуг`
+                : "Ничего не найдено"}
             </p>
             {searchResults.length > 0 && (
               <div className="space-y-2">
-                {searchResults.map((item, i) => {
-                  const inCart = isInCart(item.name);
-                  return (
-                    <motion.div
-                      key={i}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.03, duration: 0.3 }}
-                      className={`flex items-center justify-between py-4 px-5 rounded-xl border transition-colors bg-white ${
-                        inCart ? "border-[var(--brand-pink)] bg-[var(--brand-pink)]/5" : "border-gray-100 hover:border-[var(--brand-pink)]"
-                      }`}
-                    >
-                      <div className="flex-1 min-w-0">
-                        <p className="font-serif text-base truncate">{item.name}</p>
-                        <p className="font-sans text-xs text-[var(--brand-text)]/40 mt-0.5">
-                          {item.category} &middot; {item.subcategory}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-3 ml-4 shrink-0">
-                        {item.note && (
-                          <span className="hidden md:flex items-center gap-1 font-sans text-xs text-[var(--brand-text)]/40">
-                            <Clock size={12} /> {item.note}
-                          </span>
-                        )}
-                        <span className="font-sans text-sm font-medium whitespace-nowrap">{item.price}</span>
-                        <button
-                          onClick={() => toggleService({ categoryId: findCategoryId(item.category), name: item.name, price: item.price })}
-                          className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors shrink-0 ${
-                            inCart
-                              ? "bg-[var(--brand-pink)] text-[var(--brand-text)]"
-                              : "bg-gray-100 text-gray-400 hover:bg-[var(--brand-pink)]/50 hover:text-[var(--brand-text)]"
-                          }`}
-                          aria-label={inCart ? "Убрать из записи" : "Добавить к записи"}
-                        >
-                          {inCart ? <Check size={14} /> : <Plus size={14} />}
-                        </button>
-                      </div>
-                    </motion.div>
-                  );
-                })}
+                {searchResults.map((item, i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.03, duration: 0.3 }}
+                    className="flex items-center justify-between py-4 px-5 rounded-xl border border-gray-100 hover:border-[var(--brand-pink)] transition-colors bg-white"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="font-serif text-base truncate">{item.name}</p>
+                      <p className="font-sans text-xs text-[var(--brand-text)]/40 mt-0.5">
+                        {item.category} &middot; {item.subcategory}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3 ml-4 shrink-0">
+                      {item.note && (
+                        <span className="hidden md:flex items-center gap-1 font-sans text-xs text-[var(--brand-text)]/40">
+                          <Clock size={12} />
+                          {item.note}
+                        </span>
+                      )}
+                      <span className="font-sans text-sm font-medium whitespace-nowrap">
+                        {item.price}
+                      </span>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             )}
           </div>
@@ -177,7 +169,10 @@ export default function ServicesPage() {
                 return (
                   <button
                     key={cat.id}
-                    onClick={() => { setActiveCategory(cat.id); setOpenSubs(new Set()); }}
+                    onClick={() => {
+                      setActiveCategory(cat.id);
+                      setOpenSubs(new Set());
+                    }}
                     className={`flex items-center gap-2 px-4 py-2.5 rounded-full border whitespace-nowrap font-sans text-xs transition-colors focus-visible:ring-2 focus-visible:ring-[var(--brand-pink-dark)] focus-visible:ring-offset-2 ${
                       isActive
                         ? "bg-[var(--brand-pink)] border-[var(--brand-pink)] text-[var(--brand-text)]"
@@ -207,10 +202,13 @@ export default function ServicesPage() {
                           <span className="text-xs text-[var(--brand-text)]/30">{sub.items.length}</span>
                           <ChevronDown
                             size={16}
-                            className={`text-[var(--brand-text)]/40 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                            className={`text-[var(--brand-text)]/40 transition-transform duration-200 ${
+                              open ? "rotate-180" : ""
+                            }`}
                           />
                         </div>
                       </button>
+
                       <AnimatePresence initial={false}>
                         {open && (
                           <motion.div
@@ -221,42 +219,25 @@ export default function ServicesPage() {
                             className="overflow-hidden"
                           >
                             <div className="divide-y divide-gray-50">
-                              {sub.items.map((item, i) => {
-                                const inCart = isInCart(item.name);
-                                return (
-                                  <div
-                                    key={i}
-                                    className={`flex items-center justify-between px-6 py-3.5 transition-colors ${
-                                      inCart ? "bg-[var(--brand-pink)]/10" : "hover:bg-[var(--brand-pink)]/5"
-                                    }`}
-                                  >
-                                    <div className="flex-1 min-w-0 pr-4">
-                                      <p className="font-serif text-base">{item.name}</p>
-                                      {item.note && (
-                                        <p className="flex items-center gap-1 font-sans text-xs text-[var(--brand-text)]/40 mt-0.5">
-                                          <Clock size={11} /> {item.note}
-                                        </p>
-                                      )}
-                                    </div>
-                                    <div className="flex items-center gap-3 shrink-0">
-                                      <span className="font-sans text-sm font-medium whitespace-nowrap text-[var(--brand-text)]">
-                                        {item.price}
-                                      </span>
-                                      <button
-                                        onClick={() => toggleService({ categoryId: currentCategory.id, name: item.name, price: item.price })}
-                                        className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
-                                          inCart
-                                            ? "bg-[var(--brand-pink)] text-[var(--brand-text)]"
-                                            : "bg-gray-100 text-gray-400 hover:bg-[var(--brand-pink)]/50 hover:text-[var(--brand-text)]"
-                                        }`}
-                                        aria-label={inCart ? "Убрать из записи" : "Добавить к записи"}
-                                      >
-                                        {inCart ? <Check size={14} /> : <Plus size={14} />}
-                                      </button>
-                                    </div>
+                              {sub.items.map((item, i) => (
+                                <div
+                                  key={i}
+                                  className="flex items-center justify-between px-6 py-3.5 hover:bg-[var(--brand-pink)]/5 transition-colors"
+                                >
+                                  <div className="flex-1 min-w-0 pr-4">
+                                    <p className="font-serif text-base">{item.name}</p>
+                                    {item.note && (
+                                      <p className="flex items-center gap-1 font-sans text-xs text-[var(--brand-text)]/40 mt-0.5">
+                                        <Clock size={11} />
+                                        {item.note}
+                                      </p>
+                                    )}
                                   </div>
-                                );
-                              })}
+                                  <span className="font-sans text-sm font-medium whitespace-nowrap text-[var(--brand-text)]">
+                                    {item.price}
+                                  </span>
+                                </div>
+                              ))}
                             </div>
                           </motion.div>
                         )}
@@ -269,39 +250,6 @@ export default function ServicesPage() {
           </div>
         </section>
       )}
-
-      {/* Floating cart bar */}
-      <AnimatePresence>
-        {cartServices.length > 0 && (
-          <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed bottom-20 lg:bottom-6 left-4 right-4 md:left-auto md:right-6 md:max-w-md z-40"
-          >
-            <div className="bg-[var(--brand-text)] text-white rounded-2xl p-4 flex items-center gap-4" style={{ boxShadow: "0 20px 60px -10px rgba(0,0,0,0.3)" }}>
-              <div className="w-10 h-10 rounded-full bg-[var(--brand-pink)] text-[var(--brand-text)] flex items-center justify-center shrink-0">
-                <ShoppingBag size={18} />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-sans text-sm font-medium">
-                  {cartServices.length} {cartServices.length === 1 ? "услуга" : cartServices.length < 5 ? "услуги" : "услуг"}
-                </p>
-                <p className="font-sans text-xs opacity-60 truncate">
-                  {cartServices.map((s) => s.name).join(", ")}
-                </p>
-              </div>
-              <Link
-                href="/booking"
-                className="shrink-0 flex items-center gap-2 px-5 py-2.5 bg-[var(--brand-pink)] text-[var(--brand-text)] rounded-full font-sans text-xs uppercase tracking-widest hover:bg-white transition-colors"
-              >
-                Записаться <ArrowRight size={12} />
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </main>
   );
 }

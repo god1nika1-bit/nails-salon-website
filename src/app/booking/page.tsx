@@ -9,7 +9,6 @@ import { MasterSelector } from "@/components/booking/MasterSelector";
 import { DateTimeSelector } from "@/components/booking/DateTimeSelector";
 import { ConfirmationForm } from "@/components/booking/ConfirmationForm";
 import { FadeInWhenVisible } from "@/components/ui/motion";
-import { useServiceCart, type CartService } from "@/hooks/useServiceCart";
 
 export default function BookingPage() {
   return (
@@ -25,20 +24,16 @@ export default function BookingPage() {
 
 function BookingContent() {
   const searchParams = useSearchParams();
-  const cart = useServiceCart();
   const [step, setStep] = useState(1);
-  const [selectedServices, setSelectedServices] = useState<CartService[]>([]);
+  const [selectedService, setSelectedService] = useState<{
+    categoryId: string;
+    name: string;
+    price: string;
+  } | null>(null);
   const [selectedMasterId, setSelectedMasterId] = useState<string | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
-
-  // Load services from cart on mount
-  useEffect(() => {
-    if (cart.services.length > 0) {
-      setSelectedServices(cart.services);
-    }
-  }, [cart.services]);
 
   // Pre-fill master from URL query
   useEffect(() => {
@@ -48,26 +43,10 @@ function BookingContent() {
     }
   }, [searchParams]);
 
-  const toggleService = (service: CartService) => {
-    setSelectedServices((prev) => {
-      if (prev.some((s) => s.name === service.name)) {
-        return prev.filter((s) => s.name !== service.name);
-      }
-      return [...prev, service];
-    });
-  };
-
-  const removeService = (name: string) => {
-    setSelectedServices((prev) => prev.filter((s) => s.name !== name));
-  };
-
-  // Get unique category IDs from all selected services for master filtering
-  const selectedCategoryIds = [...new Set(selectedServices.map((s) => s.categoryId))];
-
   const canGoNext = () => {
     switch (step) {
-      case 1: return selectedServices.length > 0;
-      case 2: return true;
+      case 1: return selectedService !== null;
+      case 2: return true; // null = "any master"
       case 3: return selectedDate !== null && selectedTime !== null;
       default: return false;
     }
@@ -97,11 +76,10 @@ function BookingContent() {
               onClick={() => {
                 setSubmitted(false);
                 setStep(1);
-                setSelectedServices([]);
+                setSelectedService(null);
                 setSelectedMasterId(null);
                 setSelectedDate(null);
                 setSelectedTime(null);
-                cart.clearCart();
               }}
               className="px-8 py-3 border border-[var(--brand-pink)] text-[var(--brand-text)] rounded-full font-sans text-xs uppercase tracking-widest hover:bg-[var(--brand-pink)] transition-colors"
             >
@@ -130,14 +108,13 @@ function BookingContent() {
         <div className="max-w-3xl mx-auto">
           {step === 1 && (
             <ServiceSelector
-              selectedServices={selectedServices}
-              onToggle={toggleService}
-              onRemove={removeService}
+              selectedService={selectedService}
+              onSelect={(s) => setSelectedService(s)}
             />
           )}
           {step === 2 && (
             <MasterSelector
-              categoryId={selectedCategoryIds[0] || null}
+              categoryId={selectedService?.categoryId || null}
               selectedMasterId={selectedMasterId}
               onSelect={(id) => setSelectedMasterId(id)}
             />
@@ -152,7 +129,7 @@ function BookingContent() {
           )}
           {step === 4 && (
             <ConfirmationForm
-              services={selectedServices}
+              service={selectedService}
               masterId={selectedMasterId}
               date={selectedDate}
               time={selectedTime}
