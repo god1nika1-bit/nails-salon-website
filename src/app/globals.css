@@ -50,6 +50,12 @@
 }
 
 :root {
+  /* Brand colors — ЛАЙК НЭЙЛС */
+  --brand-pink: #F5D3D9;
+  --brand-pink-dark: #c7919d;
+  --brand-text: #222222;
+  --brand-surface: #FAFAFA;
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
