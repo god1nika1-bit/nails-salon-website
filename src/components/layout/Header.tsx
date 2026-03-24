@@ -1,57 +1,82 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { MapPin, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { MapPin, BookOpen, Phone } from "lucide-react";
+
+const NAV_LINKS = [
+  { href: "/services", label: "Услуги" },
+  { href: "/masters", label: "Команда" },
+  { href: "/portfolio", label: "Работы" },
+  { href: "/reviews", label: "Отзывы" },
+  { href: "/blog", label: "Журнал" },
+];
 
 export function Header() {
-  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[#F5D3D9]/30">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-[var(--brand-pink)]/30">
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/" className="font-serif text-2xl tracking-wide">
-          ЛАЙК <span className="text-[#c7919d]">НЭЙЛС</span>
+          ЛАЙК <span className="text-[var(--brand-pink-dark)]">НЭЙЛС</span>
         </Link>
-        
+
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-4 xl:gap-8 font-sans text-[10px] xl:text-xs tracking-[0.2em] uppercase font-medium">
-          <Link href="/services" className="hover:text-[#c7919d] transition-colors">Услуги</Link>
-          <Link href="/masters" className="hover:text-[#c7919d] transition-colors">Команда</Link>
-          <Link href="/portfolio" className="hover:text-[#c7919d] transition-colors">Работы</Link>
-          <Link href="/reviews" className="hover:text-[#c7919d] transition-colors">Отзывы</Link>
-          <Link href="/blog" className="hover:text-[#c7919d] transition-colors">Журнал</Link>
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`relative py-2 transition-colors focus-visible:ring-2 focus-visible:ring-[var(--brand-pink-dark)] focus-visible:ring-offset-2 rounded-sm ${
+                  isActive
+                    ? "text-[var(--brand-pink-dark)]"
+                    : "text-[var(--brand-text)]/60 hover:text-[var(--brand-pink-dark)]"
+                }`}
+              >
+                {link.label}
+                <span
+                  className={`absolute bottom-0 left-0 h-[1px] bg-[var(--brand-pink-dark)] transition-all duration-300 ${
+                    isActive ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
+              </Link>
+            );
+          })}
         </nav>
-        
-        <div className="hidden lg:flex items-center gap-6 text-sm font-sans">
-          <div className="flex items-center gap-2 opacity-80 text-xs tracking-widest uppercase">
-            <MapPin size={14} className="text-[#c7919d]" />
+
+        <div className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-sans">
+          <a href="tel:+78006007413" className="flex items-center gap-1.5 opacity-70 hover:opacity-100 transition-opacity text-xs">
+            <Phone size={12} className="text-[var(--brand-pink-dark)]" />
+            <span>8 (800) 600-74-13</span>
+          </a>
+          <div className="flex items-center gap-1.5 opacity-60 text-xs">
+            <MapPin size={12} className="text-[var(--brand-pink-dark)]" />
             <span>Политехническая, 6</span>
           </div>
-          <Link href="/booking" className="px-6 py-3 bg-[#F5D3D9] text-[#222222] rounded-full font-medium text-xs uppercase tracking-widest hover:bg-[#ebd5d9] transition-all">
+          <Link
+            href="/booking"
+            className="px-6 py-3 bg-[var(--brand-pink)] text-[var(--brand-text)] rounded-full font-medium text-xs uppercase tracking-widest hover:bg-[var(--brand-pink-dark)] hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-[var(--brand-pink-dark)] focus-visible:ring-offset-2"
+          >
             Онлайн-запись
           </Link>
         </div>
 
-        {/* Mobile Burger Icon */}
-        <button className="md:flex lg:hidden text-[#222222]" onClick={() => setIsOpen(!isOpen)}>
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
+        {/* Mobile: blog button in top-right */}
+        <Link
+          href="/blog"
+          className={`lg:hidden flex items-center gap-1.5 px-3 py-2 rounded-full border transition-colors font-sans text-[10px] uppercase tracking-widest ${
+            pathname.startsWith("/blog")
+              ? "border-[var(--brand-pink)] bg-[var(--brand-pink)]/20 text-[var(--brand-pink-dark)]"
+              : "border-gray-200 text-[var(--brand-text)]/50 hover:border-[var(--brand-pink)] hover:text-[var(--brand-pink-dark)]"
+          }`}
+        >
+          <BookOpen size={14} />
+          Журнал
+        </Link>
       </div>
-
-      {/* Mobile Menu Dropdown */}
-      {isOpen && (
-        <div className="lg:hidden absolute top-20 left-0 w-full bg-white border-b border-[#F5D3D9]/30 flex flex-col items-center py-8 gap-6 shadow-xl z-50">
-          <Link href="/services" onClick={() => setIsOpen(false)} className="font-sans text-sm tracking-[0.2em] uppercase font-medium hover:text-[#c7919d]">Услуги и Прайс</Link>
-          <Link href="/masters" onClick={() => setIsOpen(false)} className="font-sans text-sm tracking-[0.2em] uppercase font-medium hover:text-[#c7919d]">Команда</Link>
-          <Link href="/portfolio" onClick={() => setIsOpen(false)} className="font-sans text-sm tracking-[0.2em] uppercase font-medium hover:text-[#c7919d]">Портфолио</Link>
-          <Link href="/reviews" onClick={() => setIsOpen(false)} className="font-sans text-sm tracking-[0.2em] uppercase font-medium hover:text-[#c7919d]">Отзывы</Link>
-          <Link href="/blog" onClick={() => setIsOpen(false)} className="font-sans text-sm tracking-[0.2em] uppercase font-medium hover:text-[#c7919d]">Журнал</Link>
-          <Link href="/booking" onClick={() => setIsOpen(false)} className="mt-4 px-8 py-4 bg-[#F5D3D9] text-[#222222] rounded-full font-bold text-xs uppercase tracking-widest">
-            Онлайн-запись
-          </Link>
-        </div>
-      )}
     </header>
   );
 }
