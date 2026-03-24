@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, Clock, User, Scissors, Send } from "lucide-react";
+import { Calendar, Clock, User, Scissors, Send, Loader2, Phone } from "lucide-react";
 import { getMasterById } from "@/data/masters";
+import { sendBookingToTelegram } from "@/lib/telegram";
 
 interface ConfirmationFormProps {
   service: { categoryId: string; name: string; price: string } | null;
@@ -21,6 +22,8 @@ export function ConfirmationForm({ service, masterId, date, time, onSubmit }: Co
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("+7");
   const [comment, setComment] = useState("");
+  const [sending, setSending] = useState(false);
+  const [error, setError] = useState(false);
 
   const master = masterId ? getMasterById(masterId) : null;
 
@@ -37,9 +40,29 @@ export function ConfirmationForm({ service, masterId, date, time, onSubmit }: Co
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onSubmit();
+    setError(false);
+    setSending(true);
+
+    const result = await sendBookingToTelegram({
+      service: service?.name || "—",
+      price: service?.price || "—",
+      master: master ? master.name : "Любой свободный",
+      date: date ? formatDate(date) : "—",
+      time: time || "—",
+      clientName: name,
+      clientPhone: phone,
+      comment: comment || undefined,
+    });
+
+    setSending(false);
+
+    if (result.ok) {
+      onSubmit();
+    } else {
+      setError(true);
+    }
   };
 
   return (
@@ -80,6 +103,25 @@ export function ConfirmationForm({ service, masterId, date, time, onSubmit }: Co
         </div>
       </div>
 
+      {/* Error message with phone fallback */}
+      {error && (
+        <div className="mb-6 p-4 rounded-2xl bg-red-50 border border-red-100">
+          <p className="font-sans text-sm text-red-600 mb-2">
+            Не удалось отправить заявку онлайн.
+          </p>
+          <p className="font-sans text-sm text-[var(--brand-text)]/60">
+            Позвоните нам для записи:
+          </p>
+          <a
+            href="tel:+78006007413"
+            className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[var(--brand-text)] text-white font-sans text-xs uppercase tracking-widest"
+          >
+            <Phone size={14} />
+            8 (800) 600-74-13
+          </a>
+        </div>
+      )}
+
       {/* Contact form */}
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
@@ -92,7 +134,8 @@ export function ConfirmationForm({ service, masterId, date, time, onSubmit }: Co
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Имя"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white font-sans text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-pink-dark)] focus:ring-offset-2"
+            disabled={sending}
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white font-sans text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-pink-dark)] focus:ring-offset-2 disabled:opacity-50"
           />
         </div>
 
@@ -106,7 +149,8 @@ export function ConfirmationForm({ service, masterId, date, time, onSubmit }: Co
             value={phone}
             onChange={(e) => handlePhoneChange(e.target.value)}
             placeholder="+7 (___) ___-__-__"
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white font-sans text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-pink-dark)] focus:ring-offset-2"
+            disabled={sending}
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white font-sans text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-pink-dark)] focus:ring-offset-2 disabled:opacity-50"
           />
         </div>
 
@@ -119,16 +163,27 @@ export function ConfirmationForm({ service, masterId, date, time, onSubmit }: Co
             onChange={(e) => setComment(e.target.value)}
             rows={3}
             placeholder="Пожелания, особенности..."
-            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white font-sans text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-pink-dark)] focus:ring-offset-2 resize-none"
+            disabled={sending}
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white font-sans text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-pink-dark)] focus:ring-offset-2 resize-none disabled:opacity-50"
           />
         </div>
 
         <button
           type="submit"
-          className="w-full flex items-center justify-center gap-2 py-4 bg-[var(--brand-text)] text-white rounded-full font-sans text-xs uppercase tracking-widest hover:bg-[var(--brand-pink)] hover:text-[var(--brand-text)] transition-colors"
+          disabled={sending}
+          className="w-full flex items-center justify-center gap-2 py-4 bg-[var(--brand-text)] text-white rounded-full font-sans text-xs uppercase tracking-widest hover:bg-[var(--brand-pink)] hover:text-[var(--brand-text)] transition-colors disabled:opacity-50"
         >
-          <Send size={14} />
-          Записаться
+          {sending ? (
+            <>
+              <Loader2 size={14} className="animate-spin" />
+              Отправка...
+            </>
+          ) : (
+            <>
+              <Send size={14} />
+              Записаться
+            </>
+          )}
         </button>
       </form>
     </div>

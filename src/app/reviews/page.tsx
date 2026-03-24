@@ -5,6 +5,7 @@ import { Star, MessageSquare, Send, ExternalLink } from "lucide-react";
 import { REVIEWS_DATA, getAverageRating, getReviewsBySource } from "@/data/reviews";
 import { FadeInWhenVisible } from "@/components/ui/motion";
 import { motion, AnimatePresence } from "framer-motion";
+import { sendReviewToTelegram } from "@/lib/telegram";
 
 const SOURCE_LABELS: Record<string, string> = {
   all: "Все",
@@ -44,8 +45,9 @@ export default function ReviewsPage() {
     "2gis": getReviewsBySource("2gis").length,
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await sendReviewToTelegram({ name: formName, rating: formRating, text: formText });
     setSubmitted(true);
     setFormName("");
     setFormText("");
